@@ -58,33 +58,28 @@ The neural network is a feed‑forward model with two hidden layers (ReLU activa
 
 # State Representation
 The environment encodes each battle state as a 23‑dimensional vector. This representation includes both Pokémon status information and move‑level features.
-┌──────────────────────────────────────────────────────────────┐
-│                        STATE VECTOR (23)                     │
-└──────────────────────────────────────────────────────────────┘
 
-1. CORE BATTLE FEATURES (7)
-───────────────────────────
-[0]  Attacker HP Ratio          →  attacker_currentHP / attacker_maxHP
-[1]  Defender HP Ratio          →  defender_currentHP / defender_maxHP
-[2]  Attacker Type (normalized) →  type_index(attacker_type) / 10
-[3]  Defender Type (normalized) →  type_index(defender_type) / 10
-[4]  Attacker Attack Stage      →  stage / 6   (range: -1 to 1)
-[5]  Defender Attack Stage      →  stage / 6
-[6]  Speed Flag                 →  1 if attacker_speed ≥ defender_speed else 0
+1. Core Battle Features (7)
+- [0]  Attacker HP Ratio          →  attacker_currentHP / attacker_maxHP- 
+- [1]  Defender HP Ratio          →  defender_currentHP / defender_maxHP
+- [2]  Attacker Type (normalized) →  type_index(attacker_type) / 10
+- [3]  Defender Type (normalized) →  type_index(defender_type) / 10
+- [4]  Attacker Attack Stage      →  stage / 6   (range: -1 to 1)
+- [5]  Defender Attack Stage      →  stage / 6
+- [6]  Speed Flag                 →  1 if attacker_speed ≥ defender_speed else 0
 
-2. MOVE FEATURES (4 moves × 4 features = 16)
-────────────────────────────────────────────
+2. Move Features (4 moves × 4 features = 16)
 For each move i in {1,2,3,4}:
 
 Move i Feature Block (4 values):
-    [7 + 4*(i-1) + 0]   Move Power (normalized)   → move_power / 100
-    [7 + 4*(i-1) + 1]   Move Type (normalized)    → type_index(move_type) / 10
-    [7 + 4*(i-1) + 2]   Move Category             → 0=Physical, 0.5=Special, 1=Status
-    [7 + 4*(i-1) + 3]   Move Effect Flag          → 1 if Growl-like effect else 0
+- [7 + 4*(i-1) + 0]   Move Power (normalized)   → move_power / 100
+- [7 + 4*(i-1) + 1]   Move Type (normalized)    → type_index(move_type) / 10
+- [7 + 4*(i-1) + 2]   Move Category             → 0=Physical, 0.5=Special, 1=Status
+- [7 + 4*(i-1) + 3]   Move Effect Flag          → 1 if Growl-like effect else 0
 
-───────────────────────────────────────────────────────────────
+
 TOTAL FEATURES = 7 (core) + 16 (moves) = 23
-───────────────────────────────────────────────────────────────
+
 
 # Core Battle Features (7 values)
 - Player HP ratio (0–1)
