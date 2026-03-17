@@ -120,6 +120,48 @@ Each episode ends when one Pokémon faints.
 A trained model is saved as:
 - dqn_pokemon.pth
 
+# Evaluation
+The agent was evaluated across 15,000 self‑play episodes using a combination of learning‑curve analysis and matchup‑specific win‑rate metrics. Together, these results demonstrate that the DQN converges to a stable, generalizable policy that correctly exploits type advantages in the environment.
+# Training Performance
+The figure below shows the total reward per episode (blue) and a 200‑episode moving average (red). The agent rapidly improves during early training and stabilizes around a consistent reward level as the policy converges.
+
+Key observations:
+
+- Early training shows high variance as the agent explores the action space.
+
+- The moving average rises steadily, indicating successful learning.
+
+- After ~5,000 episodes, the policy stabilizes and maintains consistent performance.
+
+- No signs of divergence, Q‑value explosion, or ther behavior were observed.
+- 
+<img width="1600" height="900" alt="Screenshot (421)" src="https://github.com/user-attachments/assets/a1e508e6-a611-4afc-867d-21c2cc667129" />
+
+# Win‑Rate Heatmap (Attacker vs Defender)
+To evaluate generalization across Pokémon matchups, the trained agent was tested in all 3×3 attacker–defender combinations. The heatmap below shows empirical win rates for each pairing.
+
+<img width="1600" height="900" alt="Screenshot (421)" src="https://github.com/user-attachments/assets/46491cae-2449-48a9-b3e9-98b0b4e5cde8" />
+
+
+# Interpretation:
+
+- The agent learns the Fire–Grass–Water type triangle perfectly:
+
+- Charizard → Venusaur: 1.00
+
+- Venusaur → Blastoise: 1.00
+
+- Blastoise → Charizard: 0.99
+
+- The reverse matchups are near zero, as expected.
+
+- Mirror matchups cluster around ~0.93 due to first‑move advantage in the environment.
+
+Randomizing turn order on speed ties does not materially change outcomes because type effectiveness dominates battle dynamics.
+
+These results confirm that the agent is not memorizing specific states but instead learning a consistent, generalizable strategy aligned with the environment’s mechanics.
+
+
 # Play Mode
 After training, the agent can battle the user in a turn‑based interface.
 
