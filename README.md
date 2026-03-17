@@ -2,7 +2,7 @@
 
 A **Double Deep Q-Network (DDQN)** agent trained from scratch to master deterministic Pokémon battles in a custom environment.
 
-This project demonstrates end-to-end reinforcement learning: custom Gym-like environment, thoughtful state & reward design, stable DDQN implementation, rigorous evaluation with learning curves + matchup heatmaps, and a playable human-vs-agent mode.
+This project demonstrates end-to-end reinforcement learning: custom environment, thoughtful state & reward design, stable DDQN implementation, rigorous evaluation with learning curves + matchup heatmaps, and a playable human-vs-agent mode.
 
 **Key highlight**: Implemented **Double DQN**  to mitigate Q-value overestimation and achieve more reliable convergence.
 
