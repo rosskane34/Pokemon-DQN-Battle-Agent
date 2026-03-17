@@ -15,7 +15,7 @@ Simplified 1v1 turn-based battles between three Pokémon:
 - **Blastoise** (Water)
 
 **Mechanics** (fully deterministic except minor speed-tie randomization):
-- 10×10 type chart
+- 10×10 type chart (More Pokemon to be added later)
 - Accurate physical/special damage calculation
 - Attack stage modifiers (e.g. Growl)
 - Speed-based turn order
