@@ -135,7 +135,8 @@ Key observations:
 
 - No signs of divergence, Q‑value explosion, or ther behavior were observed.
 - 
-<img width="1600" height="900" alt="Screenshot (421)" src="https://github.com/user-attachments/assets/a1e508e6-a611-4afc-867d-21c2cc667129" />
+<img width="995" height="565" alt="Screenshot (419)2" src="https://github.com/user-attachments/assets/9e82a598-5dff-480b-afe9-8dcc97d7f9c1" />
+
 
 # Win‑Rate Heatmap (Attacker vs Defender)
 To evaluate generalization across Pokémon matchups, the trained agent was tested in all 3×3 attacker–defender combinations. The heatmap below shows empirical win rates for each pairing.
