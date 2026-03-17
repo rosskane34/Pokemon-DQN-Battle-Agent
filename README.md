@@ -12,20 +12,27 @@ This project includes:
 
 - A playable mode where the trained agent battles the user
 
-# Project Description
-- The environment simulates simplified Pokémon battles between three starter Pokémon: Venusaur, Charizard, and Blastoise. Each Pokémon has:
+# Environment Overview
+The environment simulates deterministic Pokémon battles between:
 
-- Base stats (HP, Attack, Defense, Special Attack, Special Defense, Speed)
+- Venusaur (Grass)
+
+- Charizard (Fire)
+
+- Blastoise (Water)
+
+Each Pokémon includes:
+
+- Base stats (HP, Attack, Defense, Sp. Atk, Sp. Def, Speed)
 
 - Four moves (physical, special, or status)
 
-- A type (Grass, Fire, Water, etc.)
+- A type from a 10‑type system
 
 - Attack stage modifiers (e.g., Growl reduces Attack)
 
-# The battle system includes:
-
-- A 10×10 type‑effectiveness matrix
+# Battle Mechanics
+- 10×10 type‑effectiveness matrix -> # More Types to be added later 
 
 - Physical and special damage formulas
 
@@ -33,90 +40,66 @@ This project includes:
 
 - Turn order determined by Speed
 
-- Deterministic damage (no randomness)
+- Deterministic transitions (no RNG)
 
-The agent selects one of four moves each turn. The objective is to defeat the opponent as efficiently as possible while learning effective move selection strategies.
+The agent selects one of four moves each turn with the goal of defeating the opponent efficiently.
 
-# Deep Q-Network Agent
-The agent uses a standard DQN setup:
+# Deep Q‑Network Agent
+The agent uses a standard but fully engineered DQN setup:
 
-- Policy network and target network
+- Policy network + target network
 
-- Replay buffer for experience storage
+- Replay buffer (10,000 transitions)
 
 - Epsilon‑greedy exploration
+
+- Discount factor γ = 0.90
 
 - Huber loss for stability
 
 - Gradient clipping
 
-- Periodic target network updates
+- Target network updates every 300 steps
 
-- Discount factor γ = 0.99
+- Reward normalization to prevent Q‑value explosion
 
-The neural network is a feed‑forward model with two hidden layers (ReLU activations) mapping a 23‑dimensional state vector to four Q‑values (one per move).
+# Neural Architecture
+A feed‑forward network:
+- Input:  23‑dimensional state vector
+- Hidden: 64 → 64 (ReLU)
+- Output: 4 Q‑values (one per move)
 
-# State Representation
-The environment encodes each battle state as a 23‑dimensional vector. This representation includes both Pokémon status information and move‑level features.
+# State Representation (23 Dimensions)
+The environment encodes each battle state as a 23‑dimensional vector.
+# 1. Core Battle Features (7)
+- [0] Attacker HP ratio
+- [1] Defender HP ratio
+- [2] Attacker type (normalized index)
+- [3] Defender type (normalized index)
+- [4] Attacker attack stage (normalized)
+- [5] Defender attack stage (normalized)
+- [6] Speed flag (1 if attacker moves first)
+# 2. Move Features (16)
+- Power (normalized)
+- Type (normalized)
+- Category (0=physical, 0.5=special, 1=status)
+- Effect flag (1 if stat‑changing)
 
-1. Core Battle Features (7)
-- [0]  Attacker HP Ratio          →  attacker_currentHP / attacker_maxHP- 
-- [1]  Defender HP Ratio          →  defender_currentHP / defender_maxHP
-- [2]  Attacker Type (normalized) →  type_index(attacker_type) / 10
-- [3]  Defender Type (normalized) →  type_index(defender_type) / 10
-- [4]  Attacker Attack Stage      →  stage / 6   (range: -1 to 1)
-- [5]  Defender Attack Stage      →  stage / 6
-- [6]  Speed Flag                 →  1 if attacker_speed ≥ defender_speed else 0
+# Total: 7 + 16 = 23 features
+This representation gives the agent enough information to reason about:
 
-2. Move Features (4 moves × 4 features = 16)
-For each move i in {1,2,3,4}:
+- Type matchups
 
-Move i Feature Block (4 values):
-- [7 + 4*(i-1) + 0]   Move Power (normalized)   → move_power / 100
-- [7 + 4*(i-1) + 1]   Move Type (normalized)    → type_index(move_type) / 10
-- [7 + 4*(i-1) + 2]   Move Category             → 0=Physical, 0.5=Special, 1=Status
-- [7 + 4*(i-1) + 3]   Move Effect Flag          → 1 if Growl-like effect else 0
+- Move strength
 
+- Status utility
 
-TOTAL FEATURES = 7 (core) + 16 (moves) = 23
+- Turn order
 
+- Battle progression
 
-# Core Battle Features (7 values)
-- Player HP ratio (0–1)
-
-- Enemy HP ratio (0–1)
-
-- Player type (normalized index)
-
-- Enemy type (normalized index)
-
-- Player attack stage (normalized)
-
-- Enemy attack stage (normalized)
-
-- Speed flag (1 if player is faster, else 0)
-
-These features summarize the essential battle conditions.
-
-# Move Features (16 values)
-Each of the player's four moves contributes four features:
-
-- Power (normalized by dividing by 100)
-
-- Type (normalized index)
-
-- Category (0 = physical, 1 = special, 2 = status; normalized)
-
-- Effect flag (1 if the move applies a stat change, else 0)
-
-This gives the agent enough information to reason about move strength, typing, category, and utility.
-
-# Total State Size
-7 core features+ 4 moves × 4 features each = 23-dimensional state vector
-
-
-# Training
-Training is performed over many episodes of self‑play. Each episode continues until one Pokémon faints. The agent receives shaped rewards to encourage:
+# Reward Shaping
+The reward function encourages:
 
 - Dealing damage
 
@@ -124,12 +107,29 @@ Training is performed over many episodes of self‑play. Each episode continues 
 
 - Finishing battles quickly
 
-- Avoiding ineffective or zero‑damage moves
+- Avoiding weak or zero‑damage moves
 
-- Using status moves effectively
+- Using status moves strategically
+
+- Rewards are normalized to stabilize Q‑values.
+
+# Training
+Training is performed over thousands of self‑play episodes.
+Each episode ends when one Pokémon faints.
 
 A trained model is saved as:
-- # dqn_pokemon.pth
+- dqn_pokemon.pth
 
 # Play Mode
-After training, the agent can be evaluated in a human‑playable mode. The user selects a Pokémon and chooses moves manually, while the agent selects moves greedily based on learned Q‑values. Debug functions are included to print state vectors and Q‑values for analysis.
+After training, the agent can battle the user in a turn‑based interface.
+
+# Future Work
+- Add more Pokémon and move diversity
+
+- Expand the type system
+
+- Add stochasticity (crit chance, accuracy)
+
+- Implement multi‑agent self‑play
+
+- Explore PPO or Rainbow DQN variants
