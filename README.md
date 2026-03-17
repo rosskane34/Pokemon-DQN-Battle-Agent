@@ -74,12 +74,12 @@ Rewards clipped & normalized → prevents exploding gradients.
 
 Trained via self-play over thousands of episodes.
 
-** Total reward per episode (blue) + 200-episode moving average (orange). Rapid early improvement, then stable high performance with low variance — no signs of instability **
+**Total reward per episode (blue) + 200-episode moving average (orange). Rapid early improvement, then stable high performance with low variance — no signs of instability**
 <img width="995" height="565" alt="Screenshot (419)2" src="https://github.com/user-attachments/assets/759878d6-6803-472f-8b4c-735652484c92" />
 
 
 
-** Empirical win rates (15,000 evaluation episodes) across all 3×3 attacker-defender matchups.**
+**Win rates (15,000 evaluation episodes) across all 3×3 attacker-defender matchups**
 <img width="1600" height="900" alt="Screenshot (420)" src="https://github.com/user-attachments/assets/cd8f260e-aaa9-490d-b822-4a598e059e7f" />
 
  
