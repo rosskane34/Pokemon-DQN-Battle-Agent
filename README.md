@@ -100,7 +100,7 @@ cd Pokemon-DQN-Battle-Agent
 pip install -r requirements.txt
 
 # Train (takes ~5-10 min on CPU)
-python main.py --train
+python train.py --train
 
 # Play against trained agent
 python main.py --play
