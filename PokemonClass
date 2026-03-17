@@ -1,0 +1,86 @@
+from Moves import Move
+from Moves import MOVES
+import random
+class Pokemon:
+    def __init__(self,name,type,hp,attack,defense,spAttack,spDefense, speed, moves: list[str]):
+        self.name=name                  #parameterized constructor
+        self.type=type
+        self.totalHp=hp
+        self.currentHp=hp
+        self.attack=attack
+        self.defense=defense
+        self.speed=speed
+        self.spAttack=spAttack
+        self.spDefense=spDefense
+        self.currentMoves=[]    #define an empty list to house the pokemon's moves
+        self.allowedMoves=moves #store all learnable moves
+        self.attackStage=0
+        self.assign_Moves()
+   
+    
+    def get_name(self):
+        return self.name          #getter functions for all pokemon attributes
+    def get_type(self):
+        return self.type
+    def get_currentHp(self):
+        return self.currentHp
+    def get_MaxHP(self):
+        return self.totalHp
+    def get_Attack(self):
+        return self.attack
+    def get_Defense(self):
+        return self.defense
+    def get_Speed(self):
+        return self.speed
+    def get_specialAttack(self):
+        return self.spAttack
+    def get_specialDefense(self):
+        return self.spDefense
+    def get_Attack_Stage(self):
+        return self.attackStage
+    def show_Moves(self):
+        for move in self.currentMoves:
+            print(f"Move name: {move.getName()}")
+    def get_moves(self):
+        return self.currentMoves
+   
+    def modify_attack(self, amount):
+        self.attackStage += amount                 #modify attack based on if growl was used
+        self.attackStage = max(-6, min(6, self.attackStage))
+    
+    def show_Battle_Status(self):
+        print(f"Name: {self.get_name()}")
+        currentHpNumber=self.get_currentHp()
+        if self.get_currentHp() <=0:
+            currentHpNumber=0
+        print(f"HP: {currentHpNumber} / {self.get_MaxHP()}")
+   
+    def display_Pokemon(self):
+        print(f"Name: {self.name}, Type: {self.type}")
+        print(f"HP: {self.currentHp} / {self.totalHp}")             #display function
+        print(f"Attack: {self.attack}, Defense: {self.defense}")
+        print(f"Speed: {self.speed}")
+        print(f"Special Attack: {self.spAttack}, Special Defense: {self.spDefense}")
+        #self.show_Moves()
+
+    def take_Damage(self,damage):
+        self.currentHp-=damage
+
+    def show_Moves(self):
+        counter=1
+        for move in self.currentMoves:
+            print(str(counter)+move.getName())
+            counter+=1
+    def choose_Move(self, num):
+        num = num - 1
+        if num < 0 or num >= len(self.currentMoves):
+            return self.currentMoves[0]
+        return self.currentMoves[num]
+    def assign_Moves(self):
+        moveSelectionNumber=min(4,len(self.allowedMoves)) #we can choose either 4 moves or length of all allowed moves
+
+
+        chosen_moves = self.allowedMoves[:moveSelectionNumber]
+        self.currentMoves =[MOVES[key] for key in chosen_moves if key in MOVES]
+
+
